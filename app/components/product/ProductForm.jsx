@@ -1,6 +1,6 @@
 import {Link, useNavigate} from 'react-router';
 import {AddToCartButton} from './AddToCartButton';
-import {useAside} from './Aside';
+import {useAside} from '~/components/layout/Aside';
 
 /**
  * @param {{
@@ -65,9 +65,7 @@ export function ProductForm({productOptions, selectedVariant}) {
                   return (
                     <button
                       type="button"
-                      className={`product-options-item${
-                        exists && !selected ? ' link' : ''
-                      }`}
+                      className={`product-options-item${exists && !selected ? ' link' : ''}`}
                       key={option.name + name}
                       style={{
                         border: selected

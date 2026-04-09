@@ -1,0 +1,124 @@
+/**
+ * Configure Tailwind v4 in this file using CSS variables and directives:
+ * https://tailwindcss.com/docs/v4-beta#css-first-configuration
+ */
+
+@import 'tailwindcss';
+
+@theme {
+
+    /* NK - Colors */
+    --color-nk-black: #131112;
+    --color-nk-red: #891601;
+    --color-nk-prodred: #bc2238;
+    --color-nk-sky: #ebf3f9;
+    --color-nk-darksky: #d6e2f0;
+    --color-nk-lightsky: #d6e2f01a;
+    --color-nk-blue: #0066d6;
+    --color-nk-muteblue: #356092;
+    --color-nk-zefir: #cea2df1a;
+    --color-nk-purple: #9865c8;
+    --color-nk-gray: #848484;
+    --color-nk-milk: #f2f2f3;
+    --color-nk-mustarda: #e1dacf;
+    --color-nk-mint: #c0d9d8;
+    --color-nk-teal: #3b7f79;
+    --color-nk-demitasse: #885204;
+    --color-nk-butterfly: #c4dfa266;
+    --color-nk-treetop: #456121;
+    --color-nk-pink: #f7d3d8;
+    --color-nk-hintmint: #d0e9e7;
+    --color-nk-cream: #ffefdf;
+
+}
+
+/* Layers */
+@layer components {
+    .links-hover a:hover {
+        text-decoration: underline;
+    }
+    .max-1440 {
+        max-width: 1440px;
+        margin: 0px auto;
+    }
+}
+
+:root {
+    scrollbar-gutter: stable;
+}
+
+/* GLOBAL */
+body {
+    font-family: 'HelveticaNeueRoman', sans-serif;
+}
+button:hover {
+    cursor: pointer;
+}
+/* Firefox */
+#pf-list {
+    scrollbar-width: thin;
+    scrollbar-color: #111 transparent;
+}
+
+/* WebKit (Chrome/Edge/Safari/Opera) */
+#pf-list::-webkit-scrollbar {
+    width: 8px; /* вертикальний */
+    height: 8px; /* горизонтальний */
+}
+#pf-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+#pf-list::-webkit-scrollbar-thumb {
+    background: #111;
+    border-radius: 9999px;
+    border: 2px solid transparent; /* тонший «палец» */
+    background-clip: content-box;
+}
+#pf-list::-webkit-scrollbar-thumb:hover {
+    background: #000c;
+}
+@media (min-width: 768px) {
+    /* скролбар зліва */
+    #pf-list {
+        direction: rtl;
+    }
+    /* контент лишається звичним */
+    #pf-list > * {
+        direction: ltr;
+    }
+}
+
+/* Cart Bouncer */
+.cherie-cart-loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(1px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.cherie-cart-loader__ring {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #000;
+    border-radius: 9999px;
+    animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}

@@ -1,7 +1,7 @@
 import {useLoaderData} from 'react-router';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
-import {SearchForm} from '~/components/SearchForm';
-import {SearchResults} from '~/components/SearchResults';
+import {SearchForm} from '~/components/search/SearchForm';
+import {SearchResults} from '~/components/search/SearchResults';
 import {getEmptyPredictiveSearchResult} from '~/lib/search';
 
 /**
@@ -17,6 +17,18 @@ export const meta = () => {
 export async function loader({request, context}) {
   const url = new URL(request.url);
   const isPredictive = url.searchParams.has('predictive');
+  const wantsJson = url.searchParams.get('view') === 'json';
+
+  if (isPredictive && wantsJson) {
+    const payload = await predictiveSearch({request, context});
+    return new Response(JSON.stringify(payload), {
+      headers: {
+        'Cache-Control': 'no-store',
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    });
+  }
+
   const searchPromise = isPredictive
     ? predictiveSearch({request, context})
     : regularSearch({request, context});
@@ -393,6 +405,7 @@ async function predictiveSearch({request, context}) {
         limit,
         limitScope: 'EACH',
         term,
+        types: ['PRODUCT'],
       },
     },
   );

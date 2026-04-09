@@ -7,9 +7,7 @@ import {
   getAdjacentAndFirstAvailableVariants,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
-import {ProductPrice} from '~/components/ProductPrice';
-import {ProductImage} from '~/components/ProductImage';
-import {ProductForm} from '~/components/ProductForm';
+import {NKProductHero} from '~/components/product/NKProductHero';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 /**
@@ -103,31 +101,13 @@ export default function Product() {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const {title, descriptionHtml} = product;
-
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm
-          productOptions={productOptions}
-          selectedVariant={selectedVariant}
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
-      </div>
+    <>
+      <NKProductHero
+        product={product}
+        selectedVariant={selectedVariant}
+        productOptions={productOptions}
+      />
       <Analytics.ProductView
         data={{
           products: [
@@ -143,7 +123,7 @@ export default function Product() {
           ],
         }}
       />
-    </div>
+    </>
   );
 }
 
@@ -220,6 +200,77 @@ const PRODUCT_FRAGMENT = `#graphql
     seo {
       description
       title
+    }
+    tags
+    collections(first: 1) {
+      nodes {
+        handle
+        title
+      }
+    }
+    metafield(namespace: "custom", key: "discount_quantity") {
+      value
+    }
+    bundleFilling: metafield(namespace: "custom", key: "bundle_filling") {
+      value
+    }
+    advantages: metafield(namespace: "custom", key: "advantages") {
+      value
+    }
+    appointment: metafield(namespace: "custom", key: "appointment") {
+      value
+    }
+    sklad: metafield(namespace: "custom", key: "sklad") {
+      value
+    }
+    analiticSkald: metafield(namespace: "custom", key: "analitic_skald") {
+      value
+    }
+    techAddons: metafield(namespace: "custom", key: "tech_addons") {
+      value
+    }
+    foodAddons: metafield(namespace: "custom", key: "food_addons") {
+      value
+    }
+    energyValue: metafield(namespace: "custom", key: "energy_value") {
+      value
+    }
+    feedingRecomend: metafield(namespace: "custom", key: "feeding_recomend") {
+      value
+    }
+    media(first: 12) {
+      nodes {
+        __typename
+        ... on MediaImage {
+          id
+          image {
+            url
+            altText
+          }
+        }
+        ... on Video {
+          id
+          alt
+          previewImage {
+            url
+          }
+          sources {
+            url
+            mimeType
+          }
+        }
+        ... on ExternalVideo {
+          id
+          alt
+          embedUrl
+          previewImage {
+            url
+          }
+        }
+        ... on Model3d {
+          id
+        }
+      }
     }
   }
   ${PRODUCT_VARIANT_FRAGMENT}

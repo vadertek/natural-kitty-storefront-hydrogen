@@ -1,6 +1,6 @@
 import {useLoaderData, Link} from 'react-router';
 import {getPaginationVariables, Image} from '@shopify/hydrogen';
-import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {PaginatedResourceSection} from '~/components/shared/PaginatedResourceSection';
 
 /**
  * @param {Route.LoaderArgs} args
@@ -50,7 +50,7 @@ export default function Collections() {
   const {collections} = useLoaderData();
 
   return (
-    <div className="collections">
+    <div className="collections max-w-[1440px] mx-auto md:px-7 px-4">
       <h1>Collections</h1>
       <PaginatedResourceSection
         connection={collections}

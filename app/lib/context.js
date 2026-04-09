@@ -1,6 +1,7 @@
 import {createHydrogenContext} from '@shopify/hydrogen';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
+import {getLocaleFromRequest} from '~/lib/i18n';
 
 // Define the additional context object
 const additionalContext = {
@@ -26,14 +27,17 @@ export async function createHydrogenRouterContext(
   /**
    * Open a cache instance in the worker and a custom session instance.
    */
-  if (!env?.SESSION_SECRET) {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const sessionSecret = env?.SESSION_SECRET || 'dev-session-secret';
+
+  if (isProduction && !env?.SESSION_SECRET) {
     throw new Error('SESSION_SECRET environment variable is not set');
   }
 
   const waitUntil = executionContext.waitUntil.bind(executionContext);
   const [cache, session] = await Promise.all([
     caches.open('hydrogen'),
-    AppSession.init(request, [env.SESSION_SECRET]),
+    AppSession.init(request, [sessionSecret]),
   ]);
 
   const hydrogenContext = createHydrogenContext(
@@ -44,7 +48,7 @@ export async function createHydrogenRouterContext(
       waitUntil,
       session,
       // Or detect from URL path based on locale subpath, cookies, or any other strategy
-      i18n: {language: 'EN', country: 'US'},
+      i18n: getLocaleFromRequest(request),
       cart: {
         queryFragment: CART_QUERY_FRAGMENT,
       },

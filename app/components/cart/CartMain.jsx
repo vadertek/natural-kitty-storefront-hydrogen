@@ -1,12 +1,12 @@
 import {useOptimisticCart} from '@shopify/hydrogen';
 import {Link} from 'react-router';
-import {useAside} from '~/components/Aside';
-import {CartLineItem} from '~/components/CartLineItem';
+import {useAside} from '~/components/layout/Aside';
+import {CartLineItem} from '~/components/cart/CartLineItem';
 import {CartSummary} from './CartSummary';
 /**
  * Returns a map of all line items and their children.
  * @param {CartLine[]} lines
- * @return {import("/home/runner/work/hydrogen/hydrogen/templates/skeleton-js/app/components/CartMain").LineItemChildrenMap}
+ * @return {import("D:/VADERTEK/HYDRO/cherie-hydrogen/app/components/CartMain").LineItemChildrenMap}
  */
 function getLineItemChildrenMap(lines) {
   const children = {};
@@ -112,4 +112,4 @@ function CartEmpty({hidden = false}) {
 
 /** @typedef {import('@shopify/hydrogen').OptimisticCartLine} OptimisticCartLine */
 /** @typedef {import('storefrontapi.generated').CartApiQueryFragment} CartApiQueryFragment */
-/** @typedef {import('~/components/CartLineItem').CartLine} CartLine */
+/** @typedef {import('~/components/cart/CartLineItem').CartLine} CartLine */

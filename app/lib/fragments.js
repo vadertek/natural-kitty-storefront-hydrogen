@@ -179,6 +179,20 @@ const MENU_FRAGMENT = `#graphql
     title
     type
     url
+    resource {
+      ... on Collection {
+        id
+        image {
+          url
+        }
+      }
+      ... on Product {
+        id
+        featuredImage {
+          url
+        }
+      }
+    }
   }
   fragment ChildMenuItem on MenuItem {
     ...MenuItem
@@ -216,12 +230,28 @@ export const HEADER_QUERY = `#graphql
   query Header(
     $country: CountryCode
     $headerMenuHandle: String!
+    $headerRightMenuHandle: String!
+    $mainPagesMenuHandle: String!
+    $megaMenuTopHandle: String!
+    $megaMenuBottomHandle: String!
     $language: LanguageCode
   ) @inContext(language: $language, country: $country) {
     shop {
       ...Shop
     }
     menu(handle: $headerMenuHandle) {
+      ...Menu
+    }
+    headerRightMenu: menu(handle: $headerRightMenuHandle) {
+      ...Menu
+    }
+    mainPagesMenu: menu(handle: $mainPagesMenuHandle) {
+      ...Menu
+    }
+    megaMenuTop: menu(handle: $megaMenuTopHandle) {
+      ...Menu
+    }
+    megaMenuBottom: menu(handle: $megaMenuBottomHandle) {
       ...Menu
     }
   }
@@ -232,9 +262,13 @@ export const FOOTER_QUERY = `#graphql
   query Footer(
     $country: CountryCode
     $footerMenuHandle: String!
+    $footerRightMenuHandle: String!
     $language: LanguageCode
   ) @inContext(language: $language, country: $country) {
     menu(handle: $footerMenuHandle) {
+      ...Menu
+    }
+    footerRightMenu: menu(handle: $footerRightMenuHandle) {
       ...Menu
     }
   }

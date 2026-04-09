@@ -1,7 +1,7 @@
 import {useLoaderData} from 'react-router';
 import {getPaginationVariables} from '@shopify/hydrogen';
-import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
-import {ProductItem} from '~/components/ProductItem';
+import {PaginatedResourceSection} from '~/components/shared/PaginatedResourceSection';
+import {ProductItem} from '~/components/product/ProductItem';
 
 /**
  * @type {Route.MetaFunction}
@@ -58,7 +58,7 @@ export default function Collection() {
   const {products} = useLoaderData();
 
   return (
-    <div className="collection">
+    <div className="collection max-w-[1440px] mx-auto md:px-7 px-4">
       <h1>Products</h1>
       <PaginatedResourceSection
         connection={products}
