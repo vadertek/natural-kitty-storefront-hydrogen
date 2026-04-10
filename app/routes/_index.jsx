@@ -1,6 +1,11 @@
-﻿import {useLoaderData} from 'react-router';
+import {useLoaderData} from 'react-router';
+import {HomeCollectionsSliderSection} from '~/components/home/HomeCollectionsSliderSection';
 import {HomeHeroSection} from '~/components/home/HomeHeroSection';
+import {loadHomeCollectionsSliderData} from '~/components/home/HomeCollectionsSliderSection.server';
 import {HomeSubheroSection} from '~/components/home/HomeSubheroSection';
+import {loadHomeSubheroProducts} from '~/components/home/HomeSubheroSection.server';
+import {HomeWhyNkSection} from '~/components/home/HomeWhyNkSection';
+import {loadHomeWhyNkItems} from '~/components/home/HomeWhyNkSection.server';
 import mainCatVideo from '~/assets/main-cat.mp4';
 
 /**
@@ -24,12 +29,16 @@ export async function loader(args) {
  * @param {Route.LoaderArgs}
  */
 async function loadCriticalData({context}) {
-  const [{subheroCollection}] = await Promise.all([
-    context.storefront.query(HOMEPAGE_QUERY),
+  const [subheroProducts, collectionSlides, whyNkItems] = await Promise.all([
+    loadHomeSubheroProducts(context),
+    loadHomeCollectionsSliderData(context),
+    loadHomeWhyNkItems(context),
   ]);
 
   return {
-    subheroProducts: pickRandomItems(subheroCollection?.products?.nodes || [], 5),
+    subheroProducts,
+    collectionSlides,
+    whyNkItems,
   };
 }
 
@@ -48,50 +57,11 @@ export default function Homepage() {
     <div className="home-page">
       <HomeHeroSection videoSrc={mainCatVideo} />
       <HomeSubheroSection products={data.subheroProducts} />
+      <HomeCollectionsSliderSection collections={data.collectionSlides} />
+      <HomeWhyNkSection items={data.whyNkItems} />
     </div>
   );
 }
-
-function pickRandomItems(items, count) {
-  if (!items.length) return [];
-  const shuffled = [...items];
-
-  for (let i = shuffled.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-
-  return shuffled.slice(0, Math.min(count, shuffled.length));
-}
-
-const HOMEPAGE_QUERY = `#graphql
-  fragment HomeSubheroProduct on Product {
-    id
-    handle
-    title
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
-    }
-  }
-
-  query Homepage(
-    $country: CountryCode
-    $language: LanguageCode
-  ) @inContext(country: $country, language: $language) {
-    subheroCollection: collection(handle: "natural-kitty-chunk-in-gravy") {
-      id
-      products(first: 20) {
-        nodes {
-          ...HomeSubheroProduct
-        }
-      }
-    }
-  }
-`;
 
 /** @typedef {import('./+types/_index').Route} Route */
 /** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */
